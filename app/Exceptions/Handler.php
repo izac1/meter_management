@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Lib\ValidationException as CustomeValidExp;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -21,6 +22,7 @@ class Handler extends ExceptionHandler
         HttpException::class,
         ModelNotFoundException::class,
         ValidationException::class,
+        CustomeValidExp::class,
     ];
 
     /**
@@ -49,6 +51,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if ($exception instanceof ModelNotFoundException) {
+            return response('Resource not found', 404);
+        } elseif ($exception instanceof CustomeValidExp) {
+            return response()->json($exception->getResponse(), 400);
+        }
+
         return parent::render($request, $exception);
     }
 }

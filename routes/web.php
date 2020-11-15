@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\TypeController;
+
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 /*
@@ -16,3 +18,9 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+
+$router->get('/type/{id}', 'TypeController@show');
+$router->post('/type/create', 'TypeController@create');
+
+$router->post('/tarify/create', 'TarifyController@create');
+$router->get('/tarify/{id}', 'TarifyController@show');
